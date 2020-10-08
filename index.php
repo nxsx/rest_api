@@ -1,13 +1,29 @@
 <?php
 
+header('Content-Type: application/json;');
+
 require_once("dbconfig.php");
 
-$db = new Database("localhost", "registration_pdo", "root", "");
+$db = new DATABASE();
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    echo json_encode($db->query("SELECT * FROM tbl_user"));
+    $sql = "SELECT * FROM tbl_user";
+    try {
+        $select_stmt = $db->query($sql);
+    } catch (PDOException $e) {
+        $e->getMessage();
+    } finally {
+        echo json_encode($select_stmt);
+    }
 } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    echo "This is post method.";
+    $sql = "SELECT * FROM tbl_user WHERE row_id = {$_POST['id']}";
+    try {
+        $select_stmt = $db->query($sql);
+    } catch (PDOException $e) {
+        $e->getMessage();
+    } finally {
+        echo json_encode($select_stmt);
+    }
 } else {
     http_response_code(405);
 }
