@@ -37,9 +37,9 @@
     </style>
 </head>
 <body>
-    
 
-    <button type="button" onclick="loadDoc()">Change content</button>
+    <button type="button" onclick="getContent()">Get Content</button>
+    <button type="button" onclick="postContent()">Post Content</button>
 
     <table width="100%">
         <thead>
@@ -54,12 +54,12 @@
     </table>
 
     <script>
-        function loadDoc() {
+
+        function getContent() {
             let xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     let data = JSON.parse(this.responseText);
-
                     for (let i = 0; i < data.length; i++) {
                         document.getElementById('info').innerHTML += `
                             <tr>
@@ -76,8 +76,29 @@
             xhttp.open('GET', 'index.php', true);
             xhttp.send();
         }
-    </script>
 
+        function postContent() {
+            let xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    let data = JSON.parse(this.responseText);
+                    document.getElementById('info').innerHTML = `
+                        <tr>
+                            <td>${data[0].row_id}</td>
+                            <td>${data[0].username}</td>
+                            <td>${data[0].password}</td>
+                            <td>${data[0].email}</td>
+                        </tr>
+                    `;
+                }
+            }
+            let param = "id=2";
+            xhttp.open('POST', 'index.php', true);
+            xhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhttp.send(param);
+        }
+
+    </script>
 
 </body>
 </html>
